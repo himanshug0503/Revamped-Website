@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revamped Website</title>
+    <link rel="stylesheet" href="popup-style.css">
+    <link rel="icon" type="image/png" href="Logo2.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet">
+    
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Website</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 2s ease;
+            z-index: 10;
+        }
+
+        #typewriter {
+            white-space: nowrap;
+            overflow: hidden;
+            opacity: 0;
+            font-size: 10vw;
+            transition: opacity 2s ease;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 0.15em;
+            height: 1em;
+            background-color: orange;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        #continueText {
+            margin-top: 20px;
+            font-size: 1.5em;
+            opacity: 0;
+            transition: opacity 2s ease;
+            cursor: pointer;
+        }
+
+        iframe#preloadFrame {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 0;
+        }
+
+        @media (max-width: 600px) {
+            #typewriter {
+                font-size: 15vw;
+            }
+        }
+
+        .sparkle {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            background: radial-gradient(circle, white 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="preloadFrame" src="https://www.facebook.com"></iframe>
+
+    <div id="overlay">
+        <div id="typewriter"><span class="cursor"></span></div>
+        <audio id="typeSound" src="https://www.soundjay.com/mechanical/typewriter-key-1.mp3" preload="auto"></audio>
+        <div id="continueText">Click to continue</div>
+    </div>
+
+    <script>
+        const typewriter = document.getElementById("typewriter");
+        const typeSound = document.getElementById("typeSound");
+        const continueText = document.getElementById("continueText");
+        const overlay = document.getElementById("overlay");
+
+        setTimeout(() => {
+            typewriter.style.opacity = '1';
+            const text = "My Website";
+            let index = 0;
+            const cursor = typewriter.querySelector(".cursor");
+
+            function typeCharacter() {
+                if (index < text.length) {
+                    cursor.insertAdjacentText('beforebegin', text.charAt(index));
+                    typeSound.currentTime = 0;
+                    typeSound.play();
+                    index++;
+                    setTimeout(typeCharacter, 200);
+                }
+            }
+
+            typeCharacter();
+        }, 2000);
+
+        setTimeout(() => {
+            continueText.style.opacity = '1';
+        }, 5000);
+
+        function triggerGlitterReveal() {
+            if (continueText.style.opacity === '1') {
+                // Create PowerPoint-style sparkles
+                const sparkleCount = 150;
+                for (let i = 0; i < sparkleCount; i++) {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = `${Math.random() * window.innerWidth}px`;
+                    sparkle.style.top = `${Math.random() * window.innerHeight}px`;
+                    sparkle.style.opacity = 1;
+                    document.body.appendChild(sparkle);
+
+                    const dx = (Math.random() - 0.5) * 400;
+                    const dy = (Math.random() - 0.5) * 400;
+                    const scale = 0.5 + Math.random() * 1.5;
+                    const duration = 1000 + Math.random() * 2000;
+
+                    sparkle.animate([
+                        { transform: 'scale(0.5)', opacity: 1 },
+                        { transform: `translate(${dx}px, ${dy}px) scale(${scale})`, opacity: 0 }
+                    ], {
+                        duration: duration,
+                        easing: 'ease-out'
+                    });
+
+                    setTimeout(() => sparkle.remove(), duration);
+                }
+
+                // Fade out overlay
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.remove();
+                }, 2000);
+
+                document.removeEventListener('click', triggerGlitterReveal);
+                document.removeEventListener('keydown', keyListener);
+            }
+        }
+
+        function keyListener(e) {
+            if (e.key === 'Enter') {
+                triggerGlitterReveal();
+            }
+        }
+
+        document.addEventListener('click', triggerGlitterReveal);
+        document.addEventListener('keydown', keyListener);
+    </script>
+</body>
+</html>
+
